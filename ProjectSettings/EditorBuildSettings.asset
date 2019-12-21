@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/NakamaTest/NakamaTestMenu.unity
+    guid: 481cd54152bd5314ba9fd3f08551a9b5
+  - enabled: 1
+    path: Assets/NakamaTest/NakamaTestGame.unity
+    guid: 59081561ff3b5414b87ece7940e4ec94
+  m_configObjects: {}
