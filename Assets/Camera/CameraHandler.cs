@@ -12,8 +12,16 @@ public class CameraHandler : MonoBehaviour
 
    void Start()
     {
-        this.transform.position = defaultPosition;
-        this.transform.rotation = Quaternion.Euler(defaultRotation);
+        if (FollowTarget == null)
+        {
+            ThrowTargetNotSetError();
+        }
+        else 
+        { 
+            this.transform.position = defaultPosition;
+            this.transform.rotation = Quaternion.Euler(defaultRotation);
+        } 
+
     }
     void LateUpdate()
     {
@@ -22,5 +30,12 @@ public class CameraHandler : MonoBehaviour
             // Move the camera to the (maybe interpolated) position. 
             transform.position = Vector3.Lerp(transform.position, FollowTarget.transform.position + defaultPosition, Time.deltaTime * followSpeed);
         }
+        else
+            ThrowTargetNotSetError();
+    }
+
+    void ThrowTargetNotSetError()
+    {
+        Debug.LogError("FollowTarget must be initialized for the main camera! Attach an object's transform.");
     }
 }
