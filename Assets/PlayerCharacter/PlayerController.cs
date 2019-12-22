@@ -22,20 +22,15 @@ public class PlayerController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        // Get cursor position to determine look direction
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out _cursorPosition))
-        {
-            _mousePositionWorldSpace = _cursorPosition.point;
-            Debug.DrawRay(this.transform.position, _mousePositionWorldSpace - this.transform.position);
-        }
+
+        RayCastToCursorPosition();
 
         // Get movement inputs
         GetMovementInputs();
@@ -44,15 +39,15 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Look direction: " + (_mousePositionWorldSpace - this.transform.position).normalized);
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        // Move and rotate character
+        // Move character
         MoveCharacter();
     }
 
-
+    //
     // Methods
+    //
     void GetMovementInputs()
     {
         // Horizontal / Vertical should always be local to camera
@@ -73,5 +68,21 @@ public class PlayerController : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5f * Time.deltaTime);
         //}
+    }
+
+    void RayCastToCursorPosition()
+    {
+        // Get cursor position to determine look direction
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out _cursorPosition))
+        {
+            _mousePositionWorldSpace = _cursorPosition.point;
+            Debug.DrawRay(this.transform.position, _mousePositionWorldSpace - this.transform.position);
+
+
+            if (_cursorPosition.rigidbody != null && _cursorPosition.rigidbody.gameObject.CompareTag("CargoObject"))
+                Debug.Log("That's a box!");
+            
+        }
     }
 }

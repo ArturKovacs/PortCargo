@@ -10,7 +10,7 @@ public class CameraHandler : MonoBehaviour
     public Vector3 defaultPosition;
     public Vector3 defaultRotation;
 
-   void Start()
+   void Awake()
     {
         if (FollowTarget == null)
         {
