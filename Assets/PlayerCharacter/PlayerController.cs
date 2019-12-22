@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float moveForce = 10f;
     private float jumpForce = 2f;
+    private float pickupDistance = 2f;
 
     private Vector3 _moveDirection;
     public Transform _cameraTransform;
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
     private RaycastHit _cursorPosition;
     private Ray ray;
+    private GameObject rayCastedObject;
 
 
     // Start is called before the first frame update
@@ -79,9 +81,19 @@ public class PlayerController : MonoBehaviour
             _mousePositionWorldSpace = _cursorPosition.point;
             Debug.DrawRay(this.transform.position, _mousePositionWorldSpace - this.transform.position);
 
+            float distanceToObject = Vector3.Distance(_mousePositionWorldSpace, this.transform.position);
 
             if (_cursorPosition.rigidbody != null && _cursorPosition.rigidbody.gameObject.CompareTag("CargoObject"))
-                Debug.Log("That's a box!");
+            {
+                rayCastedObject = _cursorPosition.rigidbody.gameObject;
+                //Debug.Log("That's a box!");
+
+                if(Input.GetKeyDown(KeyCode.E) && distanceToObject <= pickupDistance)
+                {
+                    Debug.Log("TODO: Pickup Object");
+                    rayCastedObject.GetComponent<ISmallContainer>().PickupContainer();
+                }
+            }
             
         }
     }
