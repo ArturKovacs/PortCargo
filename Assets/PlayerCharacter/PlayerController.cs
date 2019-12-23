@@ -5,23 +5,26 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // If velocity is higher, no force will be applied
+    [Header("Movement and Pickup settings")]
     public float maxRunSpeed = 10f;
+    public float moveForce = 10f;
+    public float jumpForce = 2f;
+    public float pickupDistance = 4f;
 
-    [SerializeField]
-    private float moveForce = 10f;
-    private float jumpForce = 2f;
-    private float pickupDistance = 2f;
-
-    private Vector3 _moveDirection;
+    [Header("Camera object")]
     public Transform _cameraTransform;
 
+    private Vector3 _moveDirection;
     private Vector3 _mousePositionWorldSpace;
 
     private Rigidbody _rb;
+
     private RaycastHit _cursorPosition;
     private Ray ray;
     private GameObject rayCastedObject;
 
+
+    private GameObject activeObjectInHand;
 
     // Start is called before the first frame update
     void Awake()
@@ -92,7 +95,6 @@ public class PlayerController : MonoBehaviour
 
                 if(Input.GetKeyDown(KeyCode.E) && distanceToObject <= pickupDistance)
                 {
-                    Debug.Log("TODO: Pickup Object");
                     rayCastedObject.GetComponent<ISmallContainer>().PickupContainer();
                 }
             }

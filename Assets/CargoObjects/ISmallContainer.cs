@@ -5,5 +5,6 @@ using UnityEngine;
 public interface ISmallContainer : IContainerBase
 {
 
+
     void PickupContainer();
 }
