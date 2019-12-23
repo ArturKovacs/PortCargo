@@ -53,7 +53,9 @@ public class PlayerController : MonoBehaviour
     void GetMovementInputs()
     {
         // Horizontal / Vertical should always be local to camera
-        _moveDirection = (Input.GetAxisRaw("Horizontal") * transform.right + Input.GetAxisRaw("Vertical") * transform.forward).normalized;
+        //_moveDirection = (Input.GetAxisRaw("Horizontal") * transform.right + Input.GetAxisRaw("Vertical") * transform.forward).normalized;
+        Vector3 cameraForwardLevelled = new Vector3(0f, 0f, _cameraTransform.forward.z);
+        _moveDirection = (Input.GetAxisRaw("Horizontal") * _cameraTransform.right + Input.GetAxisRaw("Vertical") * cameraForwardLevelled).normalized;
     }
 
     void MoveCharacter()
