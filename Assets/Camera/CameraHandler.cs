@@ -69,7 +69,6 @@ public class CameraHandler : MonoBehaviour
 
     void RotateCamera()
     {
-        Debug.Log("MMB pressed down.");
         // Y ROTATION
         Vector3 oldAngles = parentTransform.localEulerAngles;
         float rotationY = oldAngles.y;
