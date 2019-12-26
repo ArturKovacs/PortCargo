@@ -23,13 +23,15 @@ public class PlayerController : MonoBehaviour
     private Ray ray;
     private GameObject rayCastedObject;
 
-
+    [SerializeField]
+    private GameObject _pickupHolderJoint;
     private GameObject activeObjectInHand;
 
     // Start is called before the first frame update
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        //_pickupHolderJoint = FindObjectOfType<GameObject>();
     }
 
     void Update()
@@ -96,10 +98,23 @@ public class PlayerController : MonoBehaviour
 
                 if(Input.GetKeyDown(KeyCode.E) && distanceToObject <= pickupDistance)
                 {
-                    rayCastedObject.GetComponent<ISmallContainer>().PickupContainer();
+                    handleObjectPickup();
                 }
             }
             
+        }
+    }
+
+    void handleObjectPickup()
+    {
+        if (activeObjectInHand == null)
+        {
+            activeObjectInHand = rayCastedObject.GetComponent<ISmallContainer>().PickupContainer(_pickupHolderJoint);
+        }
+        else
+        {
+            activeObjectInHand.GetComponent<SmallBox>().PickupContainer(_pickupHolderJoint);
+            activeObjectInHand = null;
         }
     }
 }

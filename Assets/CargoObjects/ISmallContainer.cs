@@ -6,5 +6,5 @@ public interface ISmallContainer : IContainerBase
 {
 
 
-    void PickupContainer();
+    GameObject PickupContainer(GameObject obj);
 }

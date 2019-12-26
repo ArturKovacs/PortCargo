@@ -24,21 +24,30 @@ public class SmallBox : MonoBehaviour, ISmallContainer
         throw new System.NotImplementedException();
     }
 
-    public void PickupContainer()
+    public GameObject PickupContainer(GameObject parent)
     {
         Debug.Log("PickupContainer from SmallBox script.");
         if (pickupState == PickupState.Down)
         {
-            transform.position += new Vector3(0, 2f, 0);
+            //transform.position += new Vector3(0, 2f, 0);
+            transform.position = parent.transform.position;
+            transform.rotation = Quaternion.Lerp(transform.rotation, parent.transform.rotation, 5f * Time.deltaTime);
+            transform.parent = parent.transform;
+
             _rb.isKinematic = true;
             pickupState = PickupState.Up;
         }
         else
         {
-            pickupState = PickupState.Down;
+            Vector3 vel = _rb.velocity;
+            transform.parent = null;
+            
             _rb.isKinematic = false;
+            _rb.velocity = vel;
+
+            pickupState = PickupState.Down;
         }
 
-        
+        return this.gameObject;
     }
 }
