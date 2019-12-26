@@ -656,11 +656,6 @@ PrefabInstance:
       propertyPath: _cameraTransform
       value: 
       objectReference: {fileID: 1113610823}
-    - target: {fileID: 4725753487908366370, guid: 9a10d353dc79a094196ec0751f81c84b,
-        type: 3}
-      propertyPath: moveForce
-      value: 15
-      objectReference: {fileID: 0}
     - target: {fileID: 5967326429253465909, guid: 9a10d353dc79a094196ec0751f81c84b,
         type: 3}
       propertyPath: m_LocalPosition.x

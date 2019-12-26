@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,36 +25,34 @@ public class PlayerController : MonoBehaviour
     private GameObject rayCastedObject;
 
     [SerializeField]
-    private GameObject _pickupHolderJoint;
+    [CannotBeNullObjectField]
+    private GameObject _pickupHolderJoint; 
+    
     private GameObject activeObjectInHand;
 
     // Start is called before the first frame update
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        //_pickupHolderJoint = FindObjectOfType<GameObject>();
+
     }
 
     void Update()
     {
-
         RayCastToCursorPosition();
 
-        // Get movement inputs
         GetMovementInputs();
         RotateCharacter();
-
         //Debug.Log("Look direction: " + (_mousePositionWorldSpace - this.transform.position).normalized);
     }
 
     void FixedUpdate()
     {
-        // Move character
         MoveCharacter();
     }
 
     //
-    // Methods
+    // Methods for mechanics
     //
     void GetMovementInputs()
     {
@@ -62,7 +61,13 @@ public class PlayerController : MonoBehaviour
         //Vector3 cameraForwardLevelled = new Vector3(0f, 0f, _cameraTransform.forward.z);
         //_moveDirection = (Input.GetAxisRaw("Horizontal") * _cameraTransform.right + Input.GetAxisRaw("Vertical") * cameraForwardLevelled).normalized;
         _moveDirection = (Input.GetAxisRaw("Horizontal") * _cameraTransform.right + Input.GetAxisRaw("Vertical") * _cameraTransform.forward).normalized;
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            HandleObjectInteraction();
+        }
     }
+
 
     void MoveCharacter()
     {
@@ -88,20 +93,26 @@ public class PlayerController : MonoBehaviour
         {
             _mousePositionWorldSpace = _cursorPosition.point;
             Debug.DrawRay(this.transform.position, _mousePositionWorldSpace - this.transform.position);
+    }
+    }
 
+    private void HandleObjectInteraction()
+    {
+        if (activeObjectInHand != null)      // Drop currently held container
+        {
+            handleObjectPickup();
+        }
+        else                                // If hands empty, use raycasted object and check
+        {
             float distanceToObject = Vector3.Distance(_mousePositionWorldSpace, this.transform.position);
-
             if (_cursorPosition.rigidbody != null && _cursorPosition.rigidbody.gameObject.CompareTag("CargoObject"))
             {
                 rayCastedObject = _cursorPosition.rigidbody.gameObject;
-                //Debug.Log("That's a box!");
-
-                if(Input.GetKeyDown(KeyCode.E) && distanceToObject <= pickupDistance)
+                if (distanceToObject <= pickupDistance)
                 {
                     handleObjectPickup();
                 }
             }
-            
         }
     }
 
