@@ -21,13 +21,23 @@ public class MatchManager : MonoBehaviour
 
     public void Join()
     {
-        client.JoinMatch(MatchName.text);
-        LoadGame();
+        StartCoroutine(JoinCoroutine());
     }
 
     public void Create()
     {
-        client.CreateMatch();
+        StartCoroutine(CreateCoroutine());
+    }
+
+    private IEnumerator JoinCoroutine()
+    {
+        yield return client.JoinMatch(MatchName.text);
+        LoadGame();
+    }
+
+    private IEnumerator CreateCoroutine()
+    {
+        yield return client.CreateMatch();
         LoadGame();
     }
 

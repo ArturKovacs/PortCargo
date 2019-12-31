@@ -5,7 +5,7 @@ using TMPro;
 
 public class NakamaInfo : MonoBehaviour
 {
-    public TextMeshProUGUI InfoText;
+    public TMP_InputField InfoText;
 
     NakamaClient client;
 
