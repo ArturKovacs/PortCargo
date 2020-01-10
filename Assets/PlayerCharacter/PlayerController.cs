@@ -42,13 +42,14 @@ public class PlayerController : MonoBehaviour
         RayCastToCursorPosition();
 
         GetMovementInputs();
-        RotateCharacter();
+        
         //Debug.Log("Look direction: " + (_mousePositionWorldSpace - this.transform.position).normalized);
     }
 
     void FixedUpdate()
     {
         MoveCharacter();
+        RotateCharacter();
     }
 
     //
@@ -80,8 +81,9 @@ public class PlayerController : MonoBehaviour
     {
         //if (_lookDirection != Vector3.zero) {
             Vector3 direction = (_mousePositionWorldSpace - this.transform.position).normalized;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5f * Time.deltaTime);
+            Quaternion rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), 5f * Time.deltaTime);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5f * Time.deltaTime);
+            _rb.MoveRotation(rotation);
         //}
     }
 

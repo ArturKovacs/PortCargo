@@ -39,7 +39,8 @@ public class SmallBox : MonoBehaviour, ISmallContainer
         }
         else
         {
-            Vector3 vel = _rb.velocity;
+            Rigidbody parentRb = parent.transform.parent.GetComponent<Rigidbody>();
+            Vector3 vel = parentRb.velocity + parentRb.angularVelocity;
             transform.parent = null;
             
             _rb.isKinematic = false;
