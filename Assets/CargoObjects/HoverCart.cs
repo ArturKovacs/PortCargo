@@ -15,10 +15,18 @@ public class HoverCart : MonoBehaviour, IDriveable
     [SerializeField]
     private float cartMass = 40f;
 
+    public bool isInteracting { get; private set;}
+
+    [CannotBeNullObjectField]
+    private Transform _cameraInteractPivotPoint;
+
     // RayCasts
     private RaycastHit _cursorPosition;
     private Ray ray;
     private Transform groundPoint;
+
+    // Camera Offset while interacting
+    public Vector3 cameraOffsetInteracting;
 
     void Start()
     {
@@ -71,6 +79,26 @@ public class HoverCart : MonoBehaviour, IDriveable
 
     public GameObject HandleInteraction(GameObject caller)
     {
-        throw new System.NotImplementedException();
+        if (!isInteracting)
+        {
+            GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+            if(cam != null)
+            {
+                cam.GetComponent<CameraHandler>().setTrackingTarget(this.gameObject, cameraOffsetInteracting);
+                isInteracting = true;
+            }
+            
+        }
+        else
+        {
+            GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+            if (caller.GetComponentInParent<PlayerController>().getActiveObject() == this.gameObject)
+            {
+                cam.GetComponent<CameraHandler>().resetDefaultTrackingTarget();
+                isInteracting = false;
+            }
+        }
+
+        return this.gameObject;
     }
 }

@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public float maxRunSpeed = 10f;
     public float moveForce = 10f;
     public float jumpForce = 2f;
-    public float pickupDistance = 4f;
+    public float objectInteractDistance = 4f;
 
     [Header("Camera object")]
     public Transform _cameraTransform;
@@ -21,14 +21,14 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
 
     private RaycastHit _cursorPosition;
-    private Ray ray;
-    private GameObject rayCastedObject;
+    private Ray _ray;
+    private GameObject _rayCastedObject;
 
     [SerializeField]
     [CannotBeNullObjectField]
     private GameObject _pickupHolderJoint; 
     
-    private GameObject activeObjectInHand;
+    private GameObject _activeObjectInHand;
 
     // Start is called before the first frame update
     void Awake()
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            HandleObjectInteraction();
+            InteractWithActiveObject();
         }
     }
 
@@ -90,44 +90,52 @@ public class PlayerController : MonoBehaviour
     void RayCastToCursorPosition()
     {
         // Get cursor position to determine look direction
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out _cursorPosition))
+        _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(_ray, out _cursorPosition))
         {
             _mousePositionWorldSpace = _cursorPosition.point;
             Debug.DrawRay(this.transform.position, _mousePositionWorldSpace - this.transform.position);
     }
     }
 
-    private void HandleObjectInteraction()
+    private void InteractWithActiveObject()
     {
-        if (activeObjectInHand != null)      // Drop currently held container
+        if (_activeObjectInHand != null)      // Drop currently held container
         {
-            handleObjectInteraction();
+            HandleObjectInteraction();
         }
         else                                // If hands empty, use raycasted object and check
         {
             float distanceToObject = Vector3.Distance(_mousePositionWorldSpace, this.transform.position);
             if (_cursorPosition.rigidbody != null && _cursorPosition.rigidbody.gameObject.CompareTag("CargoObjectInteractable"))
             {
-                rayCastedObject = _cursorPosition.rigidbody.gameObject;
-                if (distanceToObject <= pickupDistance)
+                _rayCastedObject = _cursorPosition.rigidbody.gameObject;
+                if (distanceToObject <= objectInteractDistance)
                 {
-                    handleObjectInteraction();
+                    HandleObjectInteraction();
                 }
             }
         }
     }
 
-    void handleObjectInteraction()
+    void HandleObjectInteraction()
     {
-        if (activeObjectInHand == null)
+        if (_activeObjectInHand == null)
         {
-            activeObjectInHand = rayCastedObject.GetComponent<IObjectInteractable>().HandleInteraction(_pickupHolderJoint);
+            _activeObjectInHand = _rayCastedObject.GetComponent<IObjectInteractable>().HandleInteraction(_pickupHolderJoint);
         }
         else
         {
-            activeObjectInHand.GetComponent<IObjectInteractable>().HandleInteraction(_pickupHolderJoint);
-            activeObjectInHand = null;
+            _activeObjectInHand.GetComponent<IObjectInteractable>().HandleInteraction(_pickupHolderJoint);
+            _activeObjectInHand = null;
         }
+    }
+
+    public GameObject getActiveObject()
+    {
+        if (_activeObjectInHand == null)
+            return null;
+        else
+            return _activeObjectInHand;
     }
 }

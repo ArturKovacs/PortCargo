@@ -5,7 +5,9 @@ using UnityEngine;
 public class CameraHandler : MonoBehaviour
 {
     [Header("Target")]
-    public Transform followTarget;
+    [SerializeField]
+    private Transform _defaultFollowTarget;
+    private Transform _activeFollowTarget;
     public float followSpeed = 3f;
 
     private Transform parentTransform;
@@ -25,23 +27,25 @@ public class CameraHandler : MonoBehaviour
 
    void Awake()
     {
-        if (followTarget == null)
+        if (_defaultFollowTarget == null)
         {
             ThrowTargetNotSetError();
         }
         else 
         {
             parentTransform = this.transform.parent.transform;
-            parentTransform.position = followTarget.position;
+            parentTransform.position = _defaultFollowTarget.position;
 
             transform.position = defaultPosition;
             transform.rotation = Quaternion.Euler(defaultRotation);
+
+            _activeFollowTarget = _defaultFollowTarget;
         } 
 
     }
     void LateUpdate()
     {
-        if (followTarget != null)
+        if (_activeFollowTarget != null)
         {
             // Move the camera to the (maybe interpolated) position. 
             TrackTarget();
@@ -64,6 +68,16 @@ public class CameraHandler : MonoBehaviour
     void ThrowTargetNotSetError()
     {
         Debug.LogError("FollowTarget must be initialized for the main camera! Attach an object's transform.");
+    }
+
+    private void setNewOffsetPosition(Vector3 newTransformPos)
+    {
+        this.transform.position = newTransformPos;
+    }
+
+    private void resetDefaultOffsetPosition()
+    {
+        setNewOffsetPosition(defaultPosition);
     }
 
 
@@ -103,7 +117,7 @@ public class CameraHandler : MonoBehaviour
 
     void TrackTarget()
     {
-        parentTransform.position = Vector3.Lerp(parentTransform.position, followTarget.transform.position, Time.deltaTime * followSpeed);
+        parentTransform.position = Vector3.Lerp(parentTransform.position, _activeFollowTarget.transform.position, Time.deltaTime * followSpeed);
     }
 
     void toggleCursorState()
@@ -118,5 +132,22 @@ public class CameraHandler : MonoBehaviour
             cursorLockState = CursorLockState.Unlocked;
             Cursor.visible = true;
         }
+    }
+
+    public void setTrackingTarget(GameObject newTarget)
+    {
+        _activeFollowTarget = newTarget.transform;
+    }
+
+    public void setTrackingTarget(GameObject newTarget, Vector3 newOffset)
+    {
+        _activeFollowTarget = newTarget.transform;
+        setNewOffsetPosition(newOffset);
+    }
+
+    public void resetDefaultTrackingTarget()
+    {
+        _activeFollowTarget = _defaultFollowTarget;
+        resetDefaultOffsetPosition();
     }
 }

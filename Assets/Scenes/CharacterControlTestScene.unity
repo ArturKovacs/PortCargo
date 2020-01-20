@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 717000382}
   m_Layer: 0
   m_Name: HoverCart
-  m_TagString: CargoObject
+  m_TagString: CargoObjectInteractable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -380,6 +380,7 @@ MonoBehaviour:
   floatingHeight: 0.2
   floatForceMultiplier: 10
   cartMass: 20
+  cameraOffsetInteracting: {x: 0, y: 6, z: -6}
 --- !u!1 &876064075
 GameObject:
   m_ObjectHideFlags: 0
@@ -904,6 +905,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmallBox
       objectReference: {fileID: 0}
+    - target: {fileID: 9057525754719217897, guid: 207745c0fc5c1ee468fca664bb802547,
+        type: 3}
+      propertyPath: m_TagString
+      value: CargoObjectInteractable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 207745c0fc5c1ee468fca664bb802547, type: 3}
 --- !u!1001 &2823323318319045980
@@ -976,6 +982,16 @@ PrefabInstance:
     - target: {fileID: 2823323317571374701, guid: 47f1af453b4efa7449decff3911d274d,
         type: 3}
       propertyPath: followTarget
+      value: 
+      objectReference: {fileID: 25357427}
+    - target: {fileID: 2823323317571374701, guid: 47f1af453b4efa7449decff3911d274d,
+        type: 3}
+      propertyPath: defaultFollowTarget
+      value: 
+      objectReference: {fileID: 25357427}
+    - target: {fileID: 2823323317571374701, guid: 47f1af453b4efa7449decff3911d274d,
+        type: 3}
+      propertyPath: _defaultFollowTarget
       value: 
       objectReference: {fileID: 25357427}
     - target: {fileID: 2823323317823600689, guid: 47f1af453b4efa7449decff3911d274d,
