@@ -102,31 +102,31 @@ public class PlayerController : MonoBehaviour
     {
         if (activeObjectInHand != null)      // Drop currently held container
         {
-            handleObjectPickup();
+            handleObjectInteraction();
         }
         else                                // If hands empty, use raycasted object and check
         {
             float distanceToObject = Vector3.Distance(_mousePositionWorldSpace, this.transform.position);
-            if (_cursorPosition.rigidbody != null && _cursorPosition.rigidbody.gameObject.CompareTag("CargoObject"))
+            if (_cursorPosition.rigidbody != null && _cursorPosition.rigidbody.gameObject.CompareTag("CargoObjectInteractable"))
             {
                 rayCastedObject = _cursorPosition.rigidbody.gameObject;
                 if (distanceToObject <= pickupDistance)
                 {
-                    handleObjectPickup();
+                    handleObjectInteraction();
                 }
             }
         }
     }
 
-    void handleObjectPickup()
+    void handleObjectInteraction()
     {
         if (activeObjectInHand == null)
         {
-            activeObjectInHand = rayCastedObject.GetComponent<ISmallContainer>().PickupContainer(_pickupHolderJoint);
+            activeObjectInHand = rayCastedObject.GetComponent<IObjectInteractable>().HandleInteraction(_pickupHolderJoint);
         }
         else
         {
-            activeObjectInHand.GetComponent<SmallBox>().PickupContainer(_pickupHolderJoint);
+            activeObjectInHand.GetComponent<IObjectInteractable>().HandleInteraction(_pickupHolderJoint);
             activeObjectInHand = null;
         }
     }
