@@ -35,14 +35,20 @@ public class CameraHandler : MonoBehaviour
         {
             parentTransform = this.transform.parent.transform;
             parentTransform.position = _defaultFollowTarget.position;
-
-            transform.position = defaultPosition;
-            transform.rotation = Quaternion.Euler(defaultRotation);
-
-            _activeFollowTarget = _defaultFollowTarget;
         } 
 
     }
+
+    private void Start()
+    {
+        //transform.position = defaultPosition;
+        setNewOffsetPosition(defaultPosition);
+        transform.rotation = Quaternion.Euler(defaultRotation);
+
+        _activeFollowTarget = _defaultFollowTarget;
+    }
+
+
     void LateUpdate()
     {
         if (_activeFollowTarget != null)
@@ -70,15 +76,6 @@ public class CameraHandler : MonoBehaviour
         Debug.LogError("FollowTarget must be initialized for the main camera! Attach an object's transform.");
     }
 
-    private void setNewOffsetPosition(Vector3 newTransformPos)
-    {
-        this.transform.position = newTransformPos;
-    }
-
-    private void resetDefaultOffsetPosition()
-    {
-        setNewOffsetPosition(defaultPosition);
-    }
 
 
     void RotateCamera()
@@ -101,18 +98,16 @@ public class CameraHandler : MonoBehaviour
 
     void ZoomCamera()
     {
-        if(Input.GetAxis("Mouse ScrollWheel") < 0)
-        {
-            transform.position -= transform.forward;
-            defaultPosition = transform.position;
-        }
-        else if(Input.GetAxis("Mouse ScrollWheel") > 0)
-        {
-            transform.position += transform.forward;
-            defaultPosition = transform.position;
-        }
-
-        
+        //if(Input.GetAxis("Mouse ScrollWheel") < 0)
+        //{
+        //    transform.position -= transform.forward;
+        //    defaultPosition = transform.position;
+        //}
+        //else if(Input.GetAxis("Mouse ScrollWheel") > 0)
+        //{
+        //    transform.position += transform.forward;
+        //    defaultPosition = transform.position;
+        //}        
     }
 
     void TrackTarget()
@@ -143,6 +138,18 @@ public class CameraHandler : MonoBehaviour
     {
         _activeFollowTarget = newTarget.transform;
         setNewOffsetPosition(newOffset);
+    }
+
+    private void setNewOffsetPosition(Vector3 newTransformPos)
+    {
+        this.gameObject.transform.localPosition = newTransformPos;
+        //gameObject.GetComponent<Transform>().position = newTransformPos;
+        //Camera.main.transform.localPosition = newTransformPos;
+    }
+
+    private void resetDefaultOffsetPosition()
+    {
+        setNewOffsetPosition(defaultPosition);
     }
 
     public void resetDefaultTrackingTarget()
